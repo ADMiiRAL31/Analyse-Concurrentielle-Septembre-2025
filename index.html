@@ -1,0 +1,476 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Analyse concurrentielle – Octobre 2025</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { 
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif;
+      background: #f5f7fa;
+      color: #2c3e50;
+      line-height: 1.6;
+      padding: 20px;
+    }
+    .container { 
+      max-width: 900px; 
+      margin: 0 auto; 
+      background: white;
+      border-radius: 8px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+    
+    /* Header */
+    .header {
+      background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%);
+      color: white;
+      padding: 40px;
+      border-radius: 8px 8px 0 0;
+    }
+    .header h1 {
+      font-size: 28px;
+      font-weight: 700;
+      margin-bottom: 10px;
+    }
+    .header p {
+      font-size: 16px;
+      opacity: 0.9;
+    }
+    
+    /* Section */
+    .section {
+      padding: 40px;
+      border-bottom: 2px solid #ecf0f1;
+    }
+    .section:last-child {
+      border-bottom: none;
+    }
+    .section-title {
+      font-size: 24px;
+      font-weight: 700;
+      color: #2c3e50;
+      margin-bottom: 25px;
+      padding-bottom: 10px;
+      border-bottom: 3px solid #3498db;
+      display: inline-block;
+    }
+    
+    /* Cards Grid */
+    .cards {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 20px;
+      margin-bottom: 30px;
+    }
+    .card {
+      background: #f8f9fa;
+      padding: 20px;
+      border-radius: 8px;
+      border-left: 4px solid #3498db;
+    }
+    .card-label {
+      font-size: 12px;
+      font-weight: 600;
+      color: #7f8c8d;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: 8px;
+    }
+    .card-value {
+      font-size: 24px;
+      font-weight: 700;
+      color: #2c3e50;
+    }
+    .card-value small {
+      font-size: 14px;
+      display: block;
+      margin-top: 5px;
+      font-weight: 400;
+      color: #7f8c8d;
+    }
+    
+    /* Info List */
+    .info-list {
+      background: #f8f9fa;
+      padding: 20px 25px;
+      border-radius: 8px;
+      margin-bottom: 20px;
+    }
+    .info-list li {
+      margin-bottom: 12px;
+      font-size: 15px;
+      line-height: 1.8;
+    }
+    .info-list strong {
+      color: #2c3e50;
+      font-weight: 600;
+    }
+    
+    /* Highlight Box */
+    .highlight {
+      background: #fff3cd;
+      border-left: 4px solid #ffc107;
+      padding: 15px 20px;
+      border-radius: 4px;
+      margin-top: 15px;
+    }
+    .highlight strong {
+      color: #856404;
+      font-weight: 600;
+    }
+    
+    /* Table */
+    .table-container {
+      overflow-x: auto;
+      margin-top: 20px;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      background: white;
+    }
+    thead {
+      background: #2c3e50;
+      color: white;
+    }
+    th {
+      padding: 15px;
+      text-align: left;
+      font-weight: 600;
+      font-size: 13px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    td {
+      padding: 15px;
+      border-bottom: 1px solid #ecf0f1;
+      font-size: 15px;
+    }
+    tr:hover {
+      background: #f8f9fa;
+    }
+    tbody td:first-child {
+      font-weight: 600;
+      color: #2c3e50;
+    }
+    
+    /* Summary */
+    .summary {
+      background: #e8f4f8;
+      border-left: 4px solid #3498db;
+      padding: 25px;
+      border-radius: 8px;
+      font-size: 16px;
+      line-height: 1.8;
+    }
+    .summary p {
+      margin-bottom: 15px;
+    }
+    .summary p:last-child {
+      margin-bottom: 0;
+    }
+    
+    /* Button */
+    .btn {
+      display: inline-block;
+      background: #3498db;
+      color: white;
+      padding: 15px 30px;
+      border-radius: 6px;
+      text-decoration: none;
+      font-weight: 600;
+      font-size: 15px;
+      margin-top: 20px;
+      transition: background 0.3s;
+    }
+    .btn:hover {
+      background: #2980b9;
+    }
+    
+    /* Footer */
+    .footer {
+      padding: 30px 40px;
+      background: #f8f9fa;
+      border-radius: 0 0 8px 8px;
+      font-size: 14px;
+      color: #7f8c8d;
+    }
+    
+    /* Emoji Icons */
+    .icon {
+      font-size: 28px;
+      margin-right: 10px;
+      vertical-align: middle;
+    }
+    
+    /* Responsive */
+    @media (max-width: 768px) {
+      body { padding: 10px; }
+      .header, .section { padding: 25px; }
+      .section-title { font-size: 20px; }
+      .cards { grid-template-columns: 1fr; }
+      table { font-size: 14px; }
+      th, td { padding: 10px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <!-- Header -->
+    <div class="header">
+      <h1>Analyse Concurrentielle — Septembre 2025</h1>
+      <p>Bienvenue au Château • Esprit de France • My Happy House • Cosy Places</p>
+    </div>
+
+    <!-- Bienvenue au Château -->
+    <div class="section">
+      <h2 class="section-title"><span class="icon">🏰</span>Bienvenue au Château</h2>
+      
+      <div class="cards">
+        <div class="card">
+          <div class="card-label">Création</div>
+          <div class="card-value">2002<small>Loi 1901</small></div>
+        </div>
+        <div class="card">
+          <div class="card-label">Lieux référencés</div>
+          <div class="card-value">68</div>
+        </div>
+        <div class="card">
+          <div class="card-label">Visites (sept. 2025)</div>
+          <div class="card-value">10 865</div>
+        </div>
+      </div>
+      
+      <ul class="info-list">
+        <li><strong>Trafic :</strong> 59,6 % organique, 25,3 % social (Pinterest principal)</li>
+        <li><strong>Top pays :</strong> Allemagne (44,5 %), Royaume-Uni (18,5 %), France (15 %)</li>
+        <li><strong>Engagement :</strong> 1 min 28 • 2,32 pages/visite • Rebond 39,9 %</li>
+      </ul>
+      
+      <div class="highlight">
+        <strong>Recommandations :</strong> Accroître la visibilité nationale et diversifier les canaux d'acquisition.
+      </div>
+    </div>
+
+    <!-- Esprit de France -->
+    <div class="section">
+      <h2 class="section-title"><span class="icon">🏡</span>Esprit de France</h2>
+      
+      <div class="cards">
+        <div class="card">
+          <div class="card-label">Création</div>
+          <div class="card-value">1981</div>
+        </div>
+        <div class="card">
+          <div class="card-label">Établissements</div>
+          <div class="card-value">40</div>
+        </div>
+        <div class="card">
+          <div class="card-label">Visites (sept. 2025)</div>
+          <div class="card-value">34 518</div>
+        </div>
+      </div>
+      
+      <ul class="info-list">
+        <li><strong>Trafic :</strong> 52,6 % organique, 29,8 % direct, 9,6 % referral</li>
+        <li><strong>Top pays :</strong> États-Unis (34,9 %), France (22,6 %), Royaume-Uni (8,5 %)</li>
+        <li><strong>Engagement :</strong> 43 secondes • 2,48 pages/visite • Rebond 47,8 %</li>
+      </ul>
+      
+      <div class="highlight">
+        <strong>Recommandations :</strong> Renforcer l'engagement et la part d'audience française.
+      </div>
+    </div>
+
+    <!-- My Happy House -->
+    <div class="section">
+      <h2 class="section-title"><span class="icon">🌿</span>My Happy House</h2>
+      
+      <div class="cards">
+        <div class="card">
+          <div class="card-label">Création</div>
+          <div class="card-value">2022<small>3 ans</small></div>
+        </div>
+        <div class="card">
+          <div class="card-label">Hébergements</div>
+          <div class="card-value">154</div>
+        </div>
+        <div class="card">
+          <div class="card-label">Visites (sept. 2025)</div>
+          <div class="card-value">1 101</div>
+        </div>
+      </div>
+      
+      <ul class="info-list">
+        <li><strong>Trafic :</strong> 36,9 % organique, 33,3 % social, 13,2 % direct</li>
+        <li><strong>Pays :</strong> France (100 %)</li>
+        <li><strong>Engagement :</strong> 1 min 01 • 2,50 pages/visite • Rebond 39,8 %</li>
+      </ul>
+      
+      <div class="highlight">
+        <strong>Recommandations :</strong> Développer la notoriété et l'ouverture internationale.
+      </div>
+    </div>
+
+    <!-- Cosy Places -->
+    <div class="section">
+      <h2 class="section-title"><span class="icon">🌍</span>Cosy Places by GAPH</h2>
+      
+      <div class="cards">
+        <div class="card">
+          <div class="card-label">Création</div>
+          <div class="card-value">≈ 2016<small>Structure actuelle : 2024-25</small></div>
+        </div>
+        <div class="card">
+          <div class="card-label">Établissements</div>
+          <div class="card-value">1 080</div>
+        </div>
+        <div class="card">
+          <div class="card-label">Visites (sept. 2025)</div>
+          <div class="card-value">1 263</div>
+        </div>
+      </div>
+      
+      <ul class="info-list">
+        <li><strong>Trafic :</strong> 62,3 % organique, 23 % referral, 10,3 % direct</li>
+        <li><strong>Pays :</strong> France (100 %)</li>
+        <li><strong>Engagement :</strong> 42 secondes • 1,97 pages/visite • Rebond 43,6 %</li>
+      </ul>
+      
+      <div class="highlight">
+        <strong>Recommandations :</strong> Consolider la présence digitale et la cohérence du réseau global.
+      </div>
+    </div>
+
+    <!-- Tableau Comparatif -->
+    <div class="section">
+      <h2 class="section-title">Comparatif Global</h2>
+      
+      <div class="table-container">
+        <table>
+          <thead>
+            <tr>
+              <th>Indicateur</th>
+              <th>Bienvenue au Château</th>
+              <th>Esprit de France</th>
+              <th>My Happy House</th>
+              <th>Cosy Places</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Visites mensuelles</td>
+              <td>10 865</td>
+              <td><strong>34 518 🏆</strong></td>
+              <td>1 101</td>
+              <td>1 263</td>
+            </tr>
+            <tr>
+              <td>Ancienneté</td>
+              <td>23 ans (2002)</td>
+              <td><strong>44 ans (1981) 🏆</strong></td>
+              <td>3 ans (2022)</td>
+              <td>≈ 9 ans (2016)</td>
+            </tr>
+            <tr>
+              <td>Lieux / Établissements</td>
+              <td>68</td>
+              <td>40</td>
+              <td>154</td>
+              <td><strong>1 080 🏆</strong></td>
+            </tr>
+            <tr>
+              <td>Trafic organique</td>
+              <td>59,6 %</td>
+              <td>52,6 %</td>
+              <td>36,9 %</td>
+              <td><strong>62,3 % 🏆</strong></td>
+            </tr>
+            <tr>
+              <td>Durée moyenne</td>
+              <td><strong>1 min 28 🏆</strong></td>
+              <td>43 secondes</td>
+              <td>1 min 01</td>
+              <td>42 secondes</td>
+            </tr>
+            <tr>
+              <td>Pages par visite</td>
+              <td>2,32</td>
+              <td>2,48</td>
+              <td><strong>2,50 🏆</strong></td>
+              <td>1,97</td>
+            </tr>
+            <tr>
+              <td>Visiteurs français</td>
+              <td>15 %</td>
+              <td>22 %</td>
+              <td><strong>100 % 🏆</strong></td>
+              <td><strong>100 % 🏆</strong></td>
+            </tr>
+            <tr>
+              <td>Trafic social</td>
+              <td>25,3 % (Pinterest)</td>
+              <td>5,3 % (Instagram)</td>
+              <td><strong>33,3 % 🏆</strong></td>
+              <td>3,7 %</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- Synthèse -->
+    <div class="section">
+      <h2 class="section-title">Synthèse</h2>
+      
+      <div class="summary">
+        <p>
+          • <strong>Esprit de France</strong> reste le plus performant en notoriété et trafic global, avec une forte présence internationale et 34 518 visites mensuelles.
+        </p>
+        <p>
+          • <strong>Bienvenue au Château</strong> bénéficie d'un fort ancrage patrimonial et d'un engagement supérieur (1 min 28), avec un excellent taux de trafic organique.
+        </p>
+        <p>
+          • <strong>My Happy House</strong> montre un bon dynamisme sur le marché français et un potentiel d'expansion significatif grâce à son catalogue de 154 hébergements.
+        </p>
+        <p>
+          • <strong>Cosy Places by GAPH</strong>, désormais réseau international de 1 080 hôtels, combine un référencement solide (62,3 % organique) et une croissance rapide à consolider.
+        </p>
+      </div>
+      
+      <a href="#" class="btn" onclick="alert('Téléchargement PDF'); return false;">📄 Recevoir la version PDF illustrée</a>
+    </div>
+
+    <!-- Footer -->
+    <div class="footer">
+      <p><strong>Préparé pour :</strong> Patrice</p>
+      <p><strong>Signature :</strong> <em>[Ton prénom – Titre – Société]</em></p>
+      <p style="margin-top: 15px; font-size: 13px;">
+        <strong>Sources :</strong> SimilarWeb (septembre 2025) + informations réseaux • Données arrondies
+      </p>
+    </div>
+  </div>
+
+  <script>
+    // Animation simple au scroll
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.style.opacity = '0';
+          entry.target.style.transform = 'translateY(20px)';
+          setTimeout(() => {
+            entry.target.style.transition = 'all 0.6s ease';
+            entry.target.style.opacity = '1';
+            entry.target.style.transform = 'translateY(0)';
+          }, 100);
+        }
+      });
+    });
+
+    document.querySelectorAll('.section').forEach(section => {
+      observer.observe(section);
+    });
+  </script>
+</body>
+</html>
